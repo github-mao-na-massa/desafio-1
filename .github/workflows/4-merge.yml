@@ -70,7 +70,7 @@ jobs:
         with:
           token: ${{ secrets.ISSUE_SECRET }}
           owner: julioarruda
-          repo: teste1
+          repo: arruda-events-badge
           title: '[Desafio 1] ${{ steps.issueinfo.outputs.nome }}'
           body: |
             participant:${{ steps.issueinfo.outputs.nome }}
