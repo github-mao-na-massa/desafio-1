@@ -47,5 +47,5 @@ jobs:
         if: ${{ steps.validacao.outputs.currentstep == '4' }}  
         run: |
           issuenumber=$(cat .github/CONFIG/issue.txt)
-          curl -X DELETE -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.ISSUE_SECRET }}" https://api.github.com/repos/tempdemo2022/Participe/issues/$issuenumber/labels
-          curl -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.ISSUE_SECRET }}" https://api.github.com/repos/tempdemo2022/Participe/issues/$issuenumber/labels -d '{"labels":["desafio2"]}'
+          curl -X DELETE -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.ISSUE_SECRET }}" https://api.github.com/repos/aprendagithub/Participe/issues/$issuenumber/labels
+          curl -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.ISSUE_SECRET }}" https://api.github.com/repos/aprendagithub/Participe/issues/$issuenumber/labels -d '{"labels":["desafio2"]}'
