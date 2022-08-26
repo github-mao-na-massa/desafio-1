@@ -1,0 +1,83 @@
+name: Inicio
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main  
+
+permissions:
+  contents: write
+
+jobs:
+  start:
+    name: Inicio
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: validate step
+        id: validacao
+        run: |
+          currentstep=$(cat .github/CONFIG/step.txt)
+          echo "::set-output name=currentstep::$currentstep"        
+      
+      - name: Update Step
+        if: ${{ steps.validacao.outputs.currentstep == '0' }}      
+        run: |
+          echo "1" > .github/CONFIG/step.txt
+          git config --global user.name 'Julio Arruda'
+          git config --global user.email 'julio.arruda@outlook.com'          
+          git add .
+          git commit -m "Atualizando Step"
+          git push
+
+      - name: Create an issue
+        if: ${{ steps.validacao.outputs.currentstep == '0' }}      
+        uses: actions-ecosystem/action-create-issue@v1
+        with:
+          github_token: ${{ secrets.ISSUE_SECRET }}
+          title: Boas Vindas ao Primeiro Desafio!!!
+          body: |
+            ## Boas vindas ao primeiro desafio
+
+            Nesse primeiro desafio, você irá aprender algumas coisas bem básicas sobre Git e GitHub,
+            e para começar, você precisa criar uma nova branch.
+            Vamos lá?
+
+            Para começar, você pode clonar o repositório para sua máquina. Para isso, você precisa ter o 
+            git cli instalado em sua máquina, caso ainda não esteja instalado em sua máquina, acesse o link:
+            [https://git-scm.com/downloads](https://git-scm.com/downloads).
+
+            Outra coisa que você precisa fazer, é configurar a chave ssh na sua máquina e no GitHub, para que você
+            possa trabalhar sem grandes problemas. [Assista aqui para aprender a fazer isso.](https://www.youtube.com/watch?v=73iAwAm60F0)
+
+            Agora que você já tem o git instalado, basta abrir seu terminal e executar o seguinte comando (você pode obter esse link na tela inicial do repositório, clicando em code):
+            ```
+            git clone git@github.com:tempdemo2022/NOME-DO-REPOSITORIO
+            ```
+
+            Com o repositório já na sua máquina, você precisa entrar na pasta que você acabou de clonar.
+            ```
+            cd  NOME-DO-REPOSITORIO
+            ```
+
+            Estamos quase lá, só mais um pouco em!!!
+            Agora, vamos criar uma nova branch, para isso, execute o seguinte comando (para seguir, crie a branch com esse mesmo nome :blush: ):
+
+            ```
+            git checkout -b nova-branch
+            ```
+
+            Agora a nova branch foi criada, mas ainda não existe no servidor, só existe na sua máquina, então, agora você precisa sincronizar
+            com o GitHub, e para fazer isso, você precisa executar esses dois comandos:
+            ```
+            git push --set-upstream origin nova-branch
+            ```
+
+
+            Pronto!!! Você acabou de criar uma nova branch, e sincronizar com o GitHub!!!
+
+            ![hula_loop_octodex](https://octodex.github.com/images/hula_loop_octodex03.gif)

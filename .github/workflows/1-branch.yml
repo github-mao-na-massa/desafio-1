@@ -1,0 +1,88 @@
+name: Criação de Branch
+
+on:
+  workflow_dispatch:
+  create:
+
+permissions:
+  contents: write
+
+jobs:
+  branch:
+    name: Criação
+    runs-on: ubuntu-latest
+    if: ${{ github.ref_type == 'branch' && github.ref_name == 'nova-branch' }}
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: validate step
+        id: validacao
+        run: |
+          git fetch
+          git checkout main
+          currentstep=$(cat .github/CONFIG/step.txt)
+          echo "::set-output name=currentstep::$currentstep"   
+
+      - name: Create an issue
+        if: ${{ steps.validacao.outputs.currentstep == '1' }} 
+        uses: actions-ecosystem/action-create-issue@v1
+        with:
+          github_token: ${{ secrets.ISSUE_SECRET }}
+          title: Segunda Parte do Desafio!!!!
+          body: |
+            ## UHULLL, Você chegou a segunda parte!!!
+
+            Agora que você já entendeu como criar uma nova branch, você precisa aprender a
+            realizar alterações no código fonte da sua aplicação, então vamos voltar para sua máquina,
+            para realizar essa parte.
+
+            Você pode abrir a pasta onde clonou o repositório, e fazer um cometário em algum dos arquivos, ou incluir um novo arquivo na pasta.
+            
+            Ah, não se esqueça de salvar o arquivo viu?
+
+            Agora que você já fez a alteração, você precisa fazer o git entender que você mexeu em algo, então
+            você pode executar o seguinte comando:
+            ```
+            git status
+            ```
+
+            Depois de executar esse comando, você vai ver que o Git está identificando que houveram alterações, seja inclusão de novos
+            arquivos, ou alterações em arquivos existentes. Agora, você precisa informar ao Git que você deseja salvar essa alteração, e para isso,
+            você pode seguir de duas maneiras, a primeira:
+            ```
+            git add .
+            ```
+            Dessa forma, seu próximo commit irá contemplar tudo oque estiver pendente, sejam alterações em arquivos, arquivos novos, exclusões, etc.
+            Mas, caso você queira incluir apenas um arquivo especifico nessa alteração, você precisa executar o seguinte comando:
+            ```
+            git add ARQUIVO
+            ```
+            Dessa forma, apenas o arquivo informado será incluido no commit, e as demais alterações ficarão pendentes até a proxima vez.
+
+            Agora que você disse para o Git oque vai ter no proximo commit, chegou a hora de realizar o commit propriamente dito, e para isso, basta executar o seguinte comando:
+
+            ```
+            git commit -m "MENSAGEM DO COMMIT"
+            ```
+
+            E agora, basta enviar tudo para o servidor, e para isso, é só executar o comando:
+            ```
+            git push
+            ```
+
+            Parabéns!!! Você acabou de realizar um commit, e sincronizar com o GitHub!!!
+            ![hula_loop_octodex](https://octodex.github.com/images/Fintechtocat.png)
+
+      - name: Update Step
+        if: ${{ steps.validacao.outputs.currentstep == '1' }}      
+        run: |
+          git fetch
+          git checkout main
+          echo "2" > .github/CONFIG/step.txt
+          git config --global user.name 'Julio Arruda'
+          git config --global user.email 'julio.arruda@outlook.com'          
+          git add .
+          git commit -m "Atualizando Step"
+          git push

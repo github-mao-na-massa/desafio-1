@@ -1,0 +1,78 @@
+name: Commit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - nova-branch
+
+permissions:
+  contents: write
+
+jobs:
+  branch:
+    name: Commit
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: validate step
+        id: validacao
+        run: |
+          git fetch
+          git checkout main
+          currentstep=$(cat .github/CONFIG/step.txt)
+          echo "::set-output name=currentstep::$currentstep"  
+          compare=$(git rev-list --right-only --count main...nova-branch)
+          echo "::set-output name=compare::$compare"           
+
+
+      - name: Create an issue
+        if: ${{ steps.validacao.outputs.compare != '0' }}      
+        uses: actions-ecosystem/action-create-issue@v1
+        with:
+          github_token: ${{ secrets.ISSUE_SECRET }}
+          title: Terceira Parte do Desafio!!!!
+          body: |
+            ## Olha só, Você chegou na terceira parte!!!
+
+            Agora, você já fez suas alterações na nossa nova branch, certo? Então, qual é o próximo passo?
+
+            Se você pensou ai, em realizar o merge para a branch main, você pensou certo!!
+
+            :warning:
+            Aqui, vale um lembrete! Quando trabalhamos com Git, uma questão muito importante é que nenhuma alteração é 
+            feita direto na branch main, porque essa branch é a que mantém o código referente ao seu ambiente de produção.
+            A versão na branch main, é a versão mais segura do seu código, então, toda alteração para branch main, DEVE ser
+            realizada atravéz de um pull request, ou seja, você sempre precisa criar uma branch para fazer suas alterações.
+            :warning:
+
+            Então antes de realizarmos o merge, o primeiro passo é criarmos um Pull Request, e é exatamente isso que vamos fazer aqui hoje!
+
+            Para isso, você pode acessar direto do GitHub, o menu de pull requests no topo da tela, ou mesmo o aviso que deve estar aparecendo ai 
+            agora mesmo.
+
+            O Pull request deve ser feito para
+            ```
+            base: main - compare: nova-branch
+            ```
+
+            E aqui, não tem segredo nenhum, é só você clicar em: **Create Pull Request**, e seguir para o proximo passo :blush:
+
+            Parabéns!!! Você acabou de criar um Pull Request!!
+            ![hula_loop_octodex](https://octodex.github.com/images/surftocat.png)
+
+
+      - name: Update Step
+        if: ${{ steps.validacao.outputs.currentstep == '2'  && steps.validacao.outputs.compare != '0' }}      
+        run: |
+          git fetch
+          git checkout main
+          echo "3" > .github/CONFIG/step.txt
+          git config --global user.name 'Julio Arruda'
+          git config --global user.email 'julio.arruda@outlook.com'          
+          git add .
+          git commit -m "Atualizando Step"
+          git push

@@ -1,0 +1,69 @@
+name: Pull Request
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+permissions:
+  contents: write
+
+jobs:
+  pr:
+    name: Pull Request
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: validate step
+        id: validacao
+        run: |
+          git fetch
+          git checkout main
+          currentstep=$(cat .github/CONFIG/step.txt)
+          echo "::set-output name=currentstep::$currentstep"           
+
+
+      - name: Create an issue
+        if: ${{ steps.validacao.outputs.currentstep == '3' }}     
+        uses: actions-ecosystem/action-create-issue@v1
+        with:
+          github_token: ${{ secrets.ISSUE_SECRET }}
+          title: Quarta Parte do Desafio!!!!
+          body: |
+            ## Estamos quase acabando!!!!
+
+            Então você acabou de criar um Pull Request, parabéns!! Agora falta pouco para que suas 
+            alterações sejam incluidas na branch main.
+
+            :warning:
+            O processo de Pull Request é um processo muito importante durante o desenvolvimento de software, 
+            já que é apartir dele que nosso código será incluido na branch principal. E para que possamos
+            entregar uma alteração de qualidade, durante nosso Pull Request podemos ter uma série de validações, 
+            como por exemplo, um **code review**, **testes automatizados**, **analise de qualidade**, entre outras coisas.
+            Nesse noss exemplo em especifico não temos nada disso integrado, mas em outros desafios você poderá ver um pouco sobre isso.
+            :warning:
+
+            Então, volte para a tela do Pull Request, e clique no botão **Merge Pull Request**.
+
+            Ah, não esqueça de apertar o botão para deletar a branch que você criou, não queremos ficar mantendo branches que não estão mais sendo usadas!!
+
+            Agora, Parabéns, sua alteração foi __mergeada__ com a branch main!!
+            ![hula_loop_octodex](https://octodex.github.com/images/welcometocat.png)
+
+
+      - name: Update Step
+        if: ${{ steps.validacao.outputs.currentstep == '3' }}      
+        run: |
+          git fetch
+          git checkout main
+          echo "4" > .github/CONFIG/step.txt
+          git config --global user.name 'Julio Arruda'
+          git config --global user.email 'julio.arruda@outlook.com'          
+          git add .
+          git commit -m "Atualizando Step"
+          git push
