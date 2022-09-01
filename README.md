@@ -2,7 +2,7 @@
 
 Boas vindas ao desafio de GitHub. Este é o primeiro de uma série de desafios onde você poderá aprender mais sobre como utilizar algumas das principais funcionalidades do **GitHub**.
 
-##### Se você ainda não está participando do desafio, mas gostaria de fazer parte desse desafio, é muito simples, [Veja como aqui](https://github.com/aprendagithub/Participe)
+##### Se você ainda não está participando do desafio, mas gostaria de fazer parte desse desafio, é muito simples, [Veja como aqui](https://github.com/github-mao-na-massa/Participe)
 
 
 ### Neste primeiro desafio, você irá aprender o básico de como utilizar o GitHub, como:
